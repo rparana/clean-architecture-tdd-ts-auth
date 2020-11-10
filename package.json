@@ -1,5 +1,5 @@
 {
-  "name": "medprev-auth",
+  "name": "clean-architecture-tdd-ts-auth",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,12 +8,11 @@
     "test:staged": "jest"
   },
   "keywords": [],
-  "author": "",
+  "author": "Rafael Paraná",
   "license": "ISC",
-  "dependencies": {
-    "git-commit-msg-linter": "^3.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "git-commit-msg-linter": "^3.0.0",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
     "@typescript-eslint/eslint-plugin": "^4.6.1",
