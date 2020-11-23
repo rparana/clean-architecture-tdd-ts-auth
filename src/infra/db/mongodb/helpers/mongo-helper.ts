@@ -8,7 +8,7 @@ export const MongoHelper = {
       useUnifiedTopology: true
     })
   },
-  async disconnet (): Promise<void> {
+  async disconnect (): Promise<void> {
     await this.client.close()
   },
   getCollection (name: string): Collection {

@@ -8,7 +8,7 @@ describe('Signup Routes', () => {
   })
 
   afterAll(async () => {
-    await MongoHelper.disconnet()
+    await MongoHelper.disconnect()
   })
 
   beforeEach(async () => {
