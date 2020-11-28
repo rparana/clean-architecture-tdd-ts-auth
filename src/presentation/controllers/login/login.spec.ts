@@ -10,7 +10,7 @@ class EmailValidatorStub implements EmailValidator {
   }
 }
 
-const makeHttpRequest = (): HttpRequest => {
+const makeFakeRequest = (): HttpRequest => {
   return {
     body: {
       email: 'any_email@mail.com',
@@ -61,7 +61,7 @@ describe('Login Controller', () => {
   test('Shoud return 400 if an invalid email is provided', async () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
-    const httpRequest = makeHttpRequest()
+    const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')))
   })
@@ -69,7 +69,7 @@ describe('Login Controller', () => {
   test('Shoud call EmailValidator with a correct email', async () => {
     const { sut, emailValidatorStub } = makeSut()
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
-    const httpRequest = makeHttpRequest()
+    const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
     expect(isValidSpy).toHaveBeenCalledWith('any_email@mail.com')
   })
