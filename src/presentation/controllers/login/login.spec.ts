@@ -3,18 +3,6 @@ import { InvalidParamError, MissingParamError } from '../../errors'
 import { badRequest, serverError, unauthorized, ok } from '../../helpers/http-helper'
 import { EmailValidator, Authentication, HttpRequest } from './login-protocols'
 
-class EmailValidatorStub implements EmailValidator {
-  isValid (_: string): boolean {
-    return true
-  }
-}
-
-class AuthenticationStub implements Authentication {
-  async auth (email: string, password: string): Promise<string> {
-    return await new Promise((resolve, reject) => resolve('valid_token'))
-  }
-}
-
 const makeFakeRequest = (): HttpRequest => {
   return {
     body: {
@@ -23,10 +11,20 @@ const makeFakeRequest = (): HttpRequest => {
     }
   }
 }
-const makeEmailValidatorStub = (): EmailValidatorStub => {
+const makeEmailValidatorStub = (): EmailValidator => {
+  class EmailValidatorStub implements EmailValidator {
+    isValid (_: string): boolean {
+      return true
+    }
+  }
   return new EmailValidatorStub()
 }
-const makeAuthenticationStub = (): AuthenticationStub => {
+const makeAuthenticationStub = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth (email: string, password: string): Promise<string> {
+      return await new Promise((resolve, reject) => resolve('valid_token'))
+    }
+  }
   return new AuthenticationStub()
 }
 
