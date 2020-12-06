@@ -1,0 +1,26 @@
+version: "3.1"
+services:
+  clean-node-api-mongo:
+    container_name: clean-node-api-mongo
+    image: mongo:4.4
+    restart: always
+    volumes:
+      - ./docker/mongo/data:/data/db
+    ports:
+      - 27018:27017
+  clean-node-api:
+    container_name: clean-node-api
+    image: node:12
+    working_dir: /usr/src/clean-node-api
+    restart: always
+    command: bash -c "npm install --only=prod && npm run debug"
+    environment:
+      - MONGO_URL=mongodb://clean-node-api-mongo:27017/clean-node-api
+    volumes:
+      - ./dist/:/usr/src/clean-node-api/dist/
+      - ./package.json:/usr/src/clean-node-api/package.json
+    ports:
+      - "5050:5050"
+      - "9222:9222"
+    links:
+      - clean-node-api-mongo
