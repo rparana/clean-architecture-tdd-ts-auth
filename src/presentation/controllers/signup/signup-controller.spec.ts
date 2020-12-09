@@ -8,8 +8,8 @@ const makeFakeRequest = (): HttpRequest => ({
   body: {
     name: 'any_name',
     email: 'valid_email@mail.com',
-    password: 'any_password',
-    passwordConfirmation: 'any_password'
+    password: 'hashed_password',
+    passwordConfirmation: 'hashed_password'
   }
 })
 
@@ -45,7 +45,7 @@ const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
   name: 'valid_name',
   email: 'valid_email@mail.com',
-  password: 'valid_password'
+  password: 'hashed_password'
 })
 
 interface SutTypes {
@@ -85,14 +85,14 @@ describe('SignUp Controller', () => {
     expect(addSpy).toHaveBeenCalledWith({
       name: 'any_name',
       email: 'valid_email@mail.com',
-      password: 'any_password'
+      password: 'hashed_password'
     })
   })
 
   test('Should return 200 if valid data is provided', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(ok(makeFakeAccount()))
+    expect(httpResponse).toEqual(ok({ accessToken: 'valid_token' }))
   })
 
   test('Should call Validation with correct values', async () => {
@@ -115,7 +115,7 @@ describe('SignUp Controller', () => {
     const isValidSpy = jest.spyOn(authenticationStub, 'auth')
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
-    expect(isValidSpy).toHaveBeenCalledWith({ email: 'valid_email@mail.com', password: 'any_password' })
+    expect(isValidSpy).toHaveBeenCalledWith({ email: 'valid_email@mail.com', password: 'hashed_password' })
   })
 
   test('Shoud returns 500 if Authentication throws', async () => {
