@@ -39,9 +39,9 @@ describe('DbAddSurvey', () => {
   test('Should call AddSurveyRepository with a correct values', async () => {
     const { sut, addSurveyRepositoryStub } = makeSut()
     const addSpy = jest.spyOn(addSurveyRepositoryStub, 'add')
-    const fakeSurvey = makeFakeSurvey()
-    await sut.add(fakeSurvey)
-    expect(addSpy).toBeCalledWith(fakeSurvey)
+    const surveyData = makeFakeSurvey()
+    await sut.add(surveyData)
+    expect(addSpy).toBeCalledWith(surveyData)
   })
 
   test('Should throw if AddSurveyRepository throws', async () => {
@@ -49,5 +49,11 @@ describe('DbAddSurvey', () => {
     jest.spyOn(addSurveyRepositoryStub, 'add').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
     const promise = sut.add(makeFakeSurvey())
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should no return if AddSurveyRepository success', async () => {
+    const { sut } = makeSut()
+    const promise = await sut.add(makeFakeSurvey())
+    expect(promise).toBeFalsy()
   })
 })
