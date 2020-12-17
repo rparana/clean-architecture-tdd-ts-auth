@@ -9,6 +9,8 @@ const makeFakeAccount = (): AccountModel => ({
   password: 'hashed_password'
 })
 
+const fakeToken = 'any_token'
+
 const makeLoadAccountByTokenRepositoryStub = (): LoadAccountByTokenRepository => {
   class LoadAccountByTokenRepositoryStub implements LoadAccountByTokenRepository {
     async loadByToken (_: string): Promise<AccountModel> {
@@ -36,7 +38,14 @@ describe('DbLoadAccountByToken Usecase', () => {
   test('Should call LoadAccountByTokenRepository with correct token', async () => {
     const { sut, loadAccountByTokenRepositoryStub } = makeSut()
     const loadByTokenSpy = jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken')
-    await sut.load('any_token')
-    expect(loadByTokenSpy).toBeCalledWith('any_token')
+    await sut.load(fakeToken)
+    expect(loadByTokenSpy).toBeCalledWith(fakeToken)
+  })
+
+  test('Should throw if LoadAccountByTokenRepository throws', async () => {
+    const { sut, loadAccountByTokenRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const promise = sut.load(fakeToken)
+    await expect(promise).rejects.toThrow()
   })
 })
