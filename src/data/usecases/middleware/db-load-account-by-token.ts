@@ -6,7 +6,7 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
   constructor (private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository) {}
 
   async load (token: string): Promise<AccountModel> {
-    await this.loadAccountByTokenRepository.loadByToken(token)
-    return null
+    const account = await this.loadAccountByTokenRepository.loadByToken(token)
+    return account
   }
 }
