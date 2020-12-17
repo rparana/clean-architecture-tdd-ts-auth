@@ -11,7 +11,9 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
     const token = await this.decrypter.decrypt(accessToken)
     if (token) {
       const account = await this.loadAccountByTokenRepository.loadByToken(token)
-      return account
+      if (account) {
+        return account
+      }
     }
     return null
   }
