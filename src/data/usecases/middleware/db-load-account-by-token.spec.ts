@@ -48,4 +48,10 @@ describe('DbLoadAccountByToken Usecase', () => {
     const promise = sut.load(fakeToken)
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should return an account on LoadAccountByTokenRepository success', async () => {
+    const { sut } = makeSut()
+    const account = await sut.load(fakeToken)
+    expect(account).toEqual(makeFakeAccount())
+  })
 })
