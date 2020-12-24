@@ -6,5 +6,6 @@
   "editor.formatOnSave": true,
   "eslint.format.enable": true,
   "eslint.alwaysShowStatus": true,
-  "eslint.validate": ["javascript", "ts", "typescript"]
+  "eslint.validate": ["javascript", "ts", "typescript"],
+  "typescript.preferences.quoteStyle": "single"
 }
