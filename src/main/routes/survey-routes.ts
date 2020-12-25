@@ -6,5 +6,5 @@ import { makeAuthMiddleware } from '../factories/middlewares/auth-middleware-fac
 
 export default (router: Router): void => {
   const adminAuth = adaptMiddleware(makeAuthMiddleware('admin'))
-  router.post('/survey', adminAuth, adaptRoute(makeSurveyController()))
+  router.post('/surveys', adminAuth, adaptRoute(makeSurveyController()))
 }
