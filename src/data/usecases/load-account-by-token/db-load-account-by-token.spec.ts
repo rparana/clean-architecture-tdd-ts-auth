@@ -1,7 +1,7 @@
 import { DbLoadAccountByToken } from './db-load-account-by-token'
 import { AccountModel } from './db-load-account-by-token-protocols'
-import { Decrypter } from '../../protocols/criptography/decrypter'
-import { LoadAccountByTokenRepository } from '../../protocols/db/account/load-account-by-token-repository'
+import { Decrypter } from '@/data/protocols/criptography/decrypter'
+import { LoadAccountByTokenRepository } from '@/data/protocols/db/account/load-account-by-token-repository'
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
@@ -74,7 +74,7 @@ describe('DbLoadAccountByToken Usecase', () => {
     const { sut, loadAccountByTokenRepositoryStub } = makeSut()
     const loadByTokenSpy = jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken')
     await sut.load(fakeToken, fakeRole)
-    expect(loadByTokenSpy).toBeCalledWith('any_value')
+    expect(loadByTokenSpy).toBeCalledWith(fakeToken, fakeRole)
   })
 
   test('Should return null on LoadAccountByTokenRepository returns null', async () => {
