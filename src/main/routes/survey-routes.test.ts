@@ -1,23 +1,21 @@
 import request from 'supertest'
-import app from '../config/app'
-import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
+import app from '@/main/config/app'
+import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
 import { sign } from 'jsonwebtoken'
-import env from '../config/env'
+import env from '@/main/config/env'
 
 let surveyCollection: Collection
 let accountCollection: Collection
 
-interface MakeAccessTokenDataType {
-  name: string
-  email: string
-  password: string
-  role?: string
-}
-
-const makeAccessToken = async (makeAccessTokenData: MakeAccessTokenDataType): Promise<string> => {
-  const result = await accountCollection.insertOne(makeAccessTokenData)
-  const id = result.ops[0]._id
+const mockAccessToken = async (): Promise<string> => {
+  const res = await accountCollection.insertOne({
+    name: 'Rafael Paraná',
+    email: 'paranafael@yahoo.com.br',
+    password: '123',
+    role: 'admin'
+  })
+  const id = res.ops[0]._id
   const accessToken = sign({ id }, env.jwtSecret)
   await accountCollection.updateOne({
     _id: id
@@ -41,14 +39,14 @@ describe('Survey Routes', () => {
   beforeEach(async () => {
     surveyCollection = await MongoHelper.getCollection('surveys')
     await surveyCollection.deleteMany({})
-    accountCollection = await MongoHelper.getCollection('account')
+    accountCollection = await MongoHelper.getCollection('accounts')
     await accountCollection.deleteMany({})
   })
 
   describe('POST /survey', () => {
     test('Should return 403 on add survey without accessToken', async () => {
       await request(app)
-        .post('/api/survey')
+        .post('/api/surveys')
         .send({
           question: 'Question',
           answers: [{
@@ -62,26 +60,21 @@ describe('Survey Routes', () => {
         .expect(403)
     })
 
-    test('Should return 403 on add survey with accessToken is no admin', async () => {
-      const accessToken = await makeAccessToken({
-        name: 'Rafael Paraná',
-        email: 'paranafael@yahoo.com.br',
-        password: '123456'
-      })
+    test('Should return 204 on add survey with valid accessToken', async () => {
+      const accessToken = await mockAccessToken()
       await request(app)
-        .post('/api/survey')
+        .post('/api/surveys')
         .set('x-access-token', accessToken)
         .send({
           question: 'Question',
           answers: [{
-            image: 'https://image.name.com',
-            answer: 'Answer 1'
-          },
-          {
+            answer: 'Answer 1',
+            image: 'http://image-name.com'
+          }, {
             answer: 'Answer 2'
           }]
         })
-        .expect(403)
+        .expect(204)
     })
   })
 })
