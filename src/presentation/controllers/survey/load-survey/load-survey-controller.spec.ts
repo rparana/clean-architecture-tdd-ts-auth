@@ -52,4 +52,10 @@ describe('LoadSurvey Controller', () => {
     const httpResponse = await sut.handle(fakeHttpRequest)
     expect(httpResponse).toEqual(noContent())
   })
+
+  test('Should return 200 if load returns items', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(fakeHttpRequest)
+    expect(httpResponse.statusCode).toBe(200)
+  })
 })
