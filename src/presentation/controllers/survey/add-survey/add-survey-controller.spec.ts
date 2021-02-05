@@ -1,7 +1,7 @@
 import { HttpRequest, Validation, AddSurvey, AddSurveyModel } from './add-survey-protocols'
-import { MissingParamError, ServerError } from '../../../errors'
+import { MissingParamError, ServerError } from '@/presentation/errors'
 import { AddSurveyController } from './add-survey-controller'
-import { badRequest, noContent, serverError } from '../../../helpers/http/http-helper'
+import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
 
 const fakeSurvey = {
   question: 'any_question',
