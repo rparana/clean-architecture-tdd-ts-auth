@@ -1,7 +1,8 @@
 import { SurveyModel } from '@/domain/models/survey'
-import { noContent } from '@/presentation/helpers/http/http-helper'
+import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest, LoadSurvey } from './load-survey-protocols'
 import { LoadSurveyController } from './load-survey-controller'
+import { ServerError } from '@/presentation/errors'
 
 const fakeHttpRequest: HttpRequest = {
   headers: null,
@@ -46,14 +47,23 @@ const makeSut = (): SutTypes => {
 }
 
 describe('LoadSurvey Controller', () => {
-  test('Should return 204 if load returns null', async () => {
+  test('Should return 500 if LoadSurvey throws', async () => {
+    const { sut, loadSurveyStub } = makeSut()
+    jest.spyOn(loadSurveyStub, 'load').mockImplementationOnce(async () => {
+      return await new Promise((resolve, reject) => reject(new Error()))
+    })
+    const httpResponse = await sut.handle(fakeHttpRequest)
+    expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
+  test('Should return 204 if LoadSurvey returns null', async () => {
     const { sut, loadSurveyStub } = makeSut()
     jest.spyOn(loadSurveyStub, 'load').mockReturnValueOnce(null)
     const httpResponse = await sut.handle(fakeHttpRequest)
     expect(httpResponse).toEqual(noContent())
   })
 
-  test('Should return 200 if load returns items', async () => {
+  test('Should return 200 if LoadSurvey returns success', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(fakeHttpRequest)
     expect(httpResponse.statusCode).toBe(200)
