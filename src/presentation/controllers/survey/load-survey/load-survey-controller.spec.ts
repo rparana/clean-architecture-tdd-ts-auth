@@ -3,28 +3,32 @@ import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest, LoadSurvey } from './load-survey-protocols'
 import { LoadSurveyController } from './load-survey-controller'
 import { ServerError } from '@/presentation/errors'
+import MockDate from 'mockdate'
 
 const fakeHttpRequest: HttpRequest = {
   headers: null,
   body: null
 }
 
-const fakeSurvey = {
-  id: '1',
-  question: 'any_question',
-  answers: [{
-    image: 'any_image',
-    answer: 'any_answer'
-  }]
+const makefakeSurvey = (): SurveyModel => {
+  return {
+    id: '1',
+    question: 'any_question',
+    answers: [{
+      image: 'any_image',
+      answer: 'any_answer'
+    }],
+    date: new Date()
+  }
 }
 
 const makeLoadSurveyStub = (): LoadSurvey => {
   class LoadSurveyStub implements LoadSurvey {
     async load (): Promise<SurveyModel[]> {
       return new Promise(resolve => resolve([
-        fakeSurvey,
+        makefakeSurvey(),
         {
-          ...fakeSurvey,
+          ...makefakeSurvey(),
           id: '2'
         }
       ]))
@@ -47,6 +51,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('LoadSurvey Controller', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   test('Should return 500 if LoadSurvey throws', async () => {
     const { sut, loadSurveyStub } = makeSut()
     jest.spyOn(loadSurveyStub, 'load').mockImplementationOnce(async () => {

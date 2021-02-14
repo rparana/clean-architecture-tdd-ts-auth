@@ -6,4 +6,5 @@ export interface SurveyModel {
     image?: string
     answer: string
   }>
+  date: Date
 }
