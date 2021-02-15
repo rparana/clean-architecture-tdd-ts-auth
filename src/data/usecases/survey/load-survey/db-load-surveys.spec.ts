@@ -1,5 +1,5 @@
-import { DbLoadSurvey } from './db-load-survey'
-import { SurveyModel, LoadSurveyRepository } from './db-load-survey-protocols'
+import { DbLoadSurveys } from './db-load-surveys'
+import { SurveyModel, LoadSurveysRepository } from './db-load-surveys-protocols'
 import MockDate from 'mockdate'
 
 const makeFakeSurvey = (): SurveyModel => {
@@ -14,27 +14,27 @@ const makeFakeSurvey = (): SurveyModel => {
   }
 }
 
-const makeLoadSurveyRepositoryStub = (): LoadSurveyRepository => {
-  class LoadSurveyRepositoryStub implements LoadSurveyRepository {
-    async load (): Promise<SurveyModel[]> {
+const makeLoadSurveysRepositoryStub = (): LoadSurveysRepository => {
+  class LoadSurveysRepositoryStub implements LoadSurveysRepository {
+    async loadAll (): Promise<SurveyModel[]> {
       return new Promise(resolve => resolve([makeFakeSurvey()]))
     }
   }
-  return new LoadSurveyRepositoryStub()
+  return new LoadSurveysRepositoryStub()
 }
 
 interface SutTypes {
-  sut: DbLoadSurvey
-  loadSurveyRepositoryStub: LoadSurveyRepository
+  sut: DbLoadSurveys
+  loadSurveysRepositoryStub: LoadSurveysRepository
 }
 
 const makeSut = (): SutTypes => {
-  const loadSurveyRepositoryStub = makeLoadSurveyRepositoryStub()
-  const sut = new DbLoadSurvey(loadSurveyRepositoryStub)
+  const loadSurveysRepositoryStub = makeLoadSurveysRepositoryStub()
+  const sut = new DbLoadSurveys(loadSurveysRepositoryStub)
 
   return {
     sut,
-    loadSurveyRepositoryStub
+    loadSurveysRepositoryStub
   }
 }
 
@@ -48,8 +48,8 @@ describe('DbAddSurvey', () => {
   })
 
   test('Should throw if LoadSurveyRepository throws', async () => {
-    const { sut, loadSurveyRepositoryStub } = makeSut()
-    jest.spyOn(loadSurveyRepositoryStub, 'load').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const { sut, loadSurveysRepositoryStub } = makeSut()
+    jest.spyOn(loadSurveysRepositoryStub, 'loadAll').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
     const promise = sut.load()
     await expect(promise).rejects.toThrow()
   })
