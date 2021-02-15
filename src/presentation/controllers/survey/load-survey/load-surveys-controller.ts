@@ -1,9 +1,9 @@
-import { LoadSurvey } from '@/domain/usecases/load-survey'
+import { LoadSurveys } from '@/domain/usecases/load-surveys'
 import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse } from './load-survey-protocols'
+import { Controller, HttpRequest, HttpResponse } from './load-surveys-protocols'
 
 export class LoadSurveyController implements Controller {
-  constructor (private readonly loadSurvey: LoadSurvey) { }
+  constructor (private readonly loadSurvey: LoadSurveys) { }
 
   async handle (_httpRequest: HttpRequest): Promise<HttpResponse> {
     try {

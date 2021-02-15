@@ -1,7 +1,7 @@
 import { SurveyModel } from '@/domain/models/survey'
 import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest, LoadSurvey } from './load-survey-protocols'
-import { LoadSurveyController } from './load-survey-controller'
+import { HttpRequest, LoadSurveys } from './load-surveys-protocols'
+import { LoadSurveyController } from './load-surveys-controller'
 import { ServerError } from '@/presentation/errors'
 import MockDate from 'mockdate'
 
@@ -22,8 +22,8 @@ const makefakeSurvey = (): SurveyModel => {
   }
 }
 
-const makeLoadSurveyStub = (): LoadSurvey => {
-  class LoadSurveyStub implements LoadSurvey {
+const makeLoadSurveyStub = (): LoadSurveys => {
+  class LoadSurveyStub implements LoadSurveys {
     async load (): Promise<SurveyModel[]> {
       return new Promise(resolve => resolve([
         makefakeSurvey(),
@@ -38,7 +38,7 @@ const makeLoadSurveyStub = (): LoadSurvey => {
 }
 interface SutTypes {
   sut: LoadSurveyController
-  loadSurveyStub: LoadSurvey
+  loadSurveyStub: LoadSurveys
 }
 
 const makeSut = (): SutTypes => {
