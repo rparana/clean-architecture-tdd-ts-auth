@@ -1,5 +1,5 @@
 import { SurveyModel } from '@/domain/models/survey'
-import { noContent, serverError } from '@/presentation/helpers/http/http-helper'
+import { noContent, serverError, ok } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest, LoadSurveys } from './load-surveys-protocols'
 import { LoadSurveyController } from './load-surveys-controller'
 import { ServerError } from '@/presentation/errors'
@@ -10,8 +10,8 @@ const fakeHttpRequest: HttpRequest = {
   body: null
 }
 
-const makefakeSurvey = (): SurveyModel => {
-  return {
+const makefakeSurvey = (): SurveyModel[] => {
+  return [{
     id: '1',
     question: 'any_question',
     answers: [{
@@ -19,19 +19,22 @@ const makefakeSurvey = (): SurveyModel => {
       answer: 'any_answer'
     }],
     date: new Date()
-  }
+  },
+  {
+    id: '2',
+    question: 'another_question',
+    answers: [{
+      image: 'any_image',
+      answer: 'any_answer'
+    }],
+    date: new Date()
+  }]
 }
 
 const makeLoadSurveysStub = (): LoadSurveys => {
   class LoadSurveysStub implements LoadSurveys {
     async load (): Promise<SurveyModel[]> {
-      return new Promise(resolve => resolve([
-        makefakeSurvey(),
-        {
-          ...makefakeSurvey(),
-          id: '2'
-        }
-      ]))
+      return new Promise(resolve => resolve(makefakeSurvey()))
     }
   }
   return new LoadSurveysStub()
@@ -85,6 +88,6 @@ describe('LoadSurvey Controller', () => {
   test('Should return 200 if LoadSurvey returns success', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(fakeHttpRequest)
-    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse).toEqual(ok(makefakeSurvey()))
   })
 })
