@@ -47,14 +47,21 @@ describe('DbAddSurvey', () => {
     MockDate.reset()
   })
 
-  test('Should throw if LoadSurveyRepository throws', async () => {
+  test('Should call LoadSurveysRepository', async () => {
+    const { sut, loadSurveysRepositoryStub } = makeSut()
+    const loadSpy = jest.spyOn(loadSurveysRepositoryStub, 'loadAll')
+    await sut.load()
+    await expect(loadSpy).toHaveBeenCalled()
+  })
+
+  test('Should throw if LoadSurveysRepository throws', async () => {
     const { sut, loadSurveysRepositoryStub } = makeSut()
     jest.spyOn(loadSurveysRepositoryStub, 'loadAll').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
     const promise = sut.load()
     await expect(promise).rejects.toThrow()
   })
 
-  test('Should return correct values if LoadSurveyRepository success', async () => {
+  test('Should return correct values if LoadSurveysRepository success', async () => {
     const { sut } = makeSut()
     const promise = await sut.load()
     expect(promise).toEqual([makeFakeSurvey()])
