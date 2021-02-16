@@ -8,10 +8,7 @@ export class LoadSurveysController implements Controller {
   async handle (_httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const surveys = await this.loadSurvey.load()
-      if (!surveys) {
-        return noContent()
-      }
-      return ok(surveys)
+      return surveys.length ? ok(surveys) : noContent()
     } catch (error) {
       return serverError(error)
     }
