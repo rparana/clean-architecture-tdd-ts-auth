@@ -44,7 +44,7 @@ const makeLogErrorRepository = (): LogErrorRepository => {
   return new LogErrorRepositoryStub()
 }
 
-interface SutTypes {
+type SutTypes = {
   sut: LogControllerDecorator
   controllerStub: Controller
   logErrorRepositoryStub: LogErrorRepository

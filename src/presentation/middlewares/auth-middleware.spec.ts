@@ -24,7 +24,7 @@ const makeLoadAccountByToken = (): LoadAccountByToken => {
   }
   return new LoadAccountByTokenStub()
 }
-interface SutTypes {
+type SutTypes = {
   sut: AuthMiddleware
   loadAccountByTokenStub: LoadAccountByToken
 }
