@@ -68,4 +68,10 @@ describe('DbLoadSurveyById', () => {
     const promise = sut.loadById('any_id')
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should DbLoadSurveyById return correct values if LoadSurveyRepository success', async () => {
+    const { sut } = makeSut()
+    const promise = await sut.loadById('any_id')
+    expect(promise).toEqual(makeFakeSurvey())
+  })
 })
