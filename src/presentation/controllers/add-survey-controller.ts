@@ -1,4 +1,4 @@
-import { Controller, HttpRequest, Validation } from './add-survey-protocols'
+import { Controller, HttpRequest, Validation } from '@/presentation/protocols'
 import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
 import { AddSurvey } from '@/domain/usecases/add-survey'
 

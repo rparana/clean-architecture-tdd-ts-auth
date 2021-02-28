@@ -1,8 +1,9 @@
 import { SurveyModel } from '@/domain/models/survey'
 import { noContent, serverError, ok } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest, LoadSurveys } from '@/presentation/controllers/survey/load-survey/load-surveys-protocols'
-import { LoadSurveysController } from '@/presentation/controllers/survey/load-survey/load-surveys-controller'
+import { HttpRequest } from '@/presentation/protocols'
+import { LoadSurveysController } from '@/presentation/controllers'
 import { ServerError } from '@/presentation/errors'
+import { LoadSurveys } from '@/domain/usecases'
 import MockDate from 'mockdate'
 
 const fakeHttpRequest: HttpRequest = {
