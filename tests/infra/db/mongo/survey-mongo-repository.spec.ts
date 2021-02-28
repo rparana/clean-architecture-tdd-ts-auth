@@ -1,8 +1,23 @@
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { Collection } from 'mongodb'
 import { SurveyMongoRepository } from '@/infra/db/mongodb/survey/survey-mongo-repository'
+import { AddSurveyModel } from '@/domain/usecases'
 
 let surveyCollection: Collection
+
+const makeFakeSurveyRequest = (): AddSurveyModel => {
+  return {
+    question: 'any_question',
+    answers: [{
+      image: 'any_image',
+      answer: 'any_answer'
+    },
+    {
+      answer: 'any_answer'
+    }],
+    date: new Date()
+  }
+}
 
 const makeSut = (): SurveyMongoRepository => {
   return new SurveyMongoRepository()
@@ -77,6 +92,22 @@ describe('Survey Mongo Repository', () => {
       const sut = makeSut()
       const surveys = await sut.loadAll()
       expect(surveys.length).toBe(0)
+    })
+  })
+
+  describe('load Survey By Id', () => {
+    test('Should load survey success', async () => {
+      const res = await surveyCollection.insertOne(makeFakeSurveyRequest())
+      const sut = makeSut()
+      const survey = await sut.loadById(res.ops[0]._id)
+      expect(survey).toBeTruthy()
+      expect(survey.id).toBeTruthy()
+    })
+
+    test('Should load survey by id return null', async () => {
+      const sut = makeSut()
+      const surveys = await sut.loadById('any_Id')
+      expect(surveys).toBeFalsy()
     })
   })
 })
