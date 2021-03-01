@@ -2,7 +2,7 @@ import { SurveyModel, SurveyResultModel } from '@/domain/models'
 import { LoadSurveyById, SaveSurveyResult, SaveSurveyResultModel } from '@/domain/usecases'
 import { HttpRequest } from '@/presentation/protocols'
 import { SaveSurveyResultController } from '@/presentation/controllers'
-import { forbidden, serverError } from '@/presentation/helpers/http/http-helper'
+import { forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { InvalidParamError, ServerError } from '@/presentation/errors'
 import MockDate from 'mockdate'
 
@@ -131,5 +131,12 @@ describe('AddSurvey Controller', () => {
     })
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpRequest = makeFakeRequest()
+    const response = await sut.handle(httpRequest)
+    expect(response).toEqual(ok(makeFakeSurveyResult()))
   })
 })
