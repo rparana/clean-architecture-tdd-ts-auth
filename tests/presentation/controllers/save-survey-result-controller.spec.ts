@@ -9,6 +9,9 @@ import MockDate from 'mockdate'
 const makeFakeRequest = (): HttpRequest => ({
   params: {
     surveyId: 'any_id'
+  },
+  body: {
+    answer: 'any_answer'
   }
 })
 
@@ -77,5 +80,13 @@ describe('AddSurvey Controller', () => {
     })
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
+  test('Should return 403 an invalid answer provider', async () => {
+    const { sut } = makeSut()
+    const httpRequest = makeFakeRequest()
+    httpRequest.body.answer = 'wrong_answer'
+    const response = await sut.handle(httpRequest)
+    expect(response).toEqual(forbidden(new InvalidParamError('answer')))
   })
 })
