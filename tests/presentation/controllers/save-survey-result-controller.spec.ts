@@ -2,9 +2,9 @@ import { SurveyModel } from '@/domain/models'
 import { LoadSurveyById } from '@/domain/usecases'
 import { HttpRequest } from '@/presentation/protocols'
 import { SaveSurveyResultController } from '@/presentation/controllers'
-import MockDate from 'mockdate'
 import { forbidden } from '@/presentation/helpers/http/http-helper'
 import { InvalidParamError } from '@/presentation/errors'
+import MockDate from 'mockdate'
 
 const makeFakeRequest = (): HttpRequest => ({
   params: {
@@ -52,6 +52,14 @@ describe('AddSurvey Controller', () => {
 
   afterAll(() => {
     MockDate.reset()
+  })
+
+  test('Should calls LoadSurveyById with correct values', async () => {
+    const { sut, loadSurveyByIdStub } = makeSut()
+    const loadSpy = jest.spyOn(loadSurveyByIdStub, 'loadById')
+    const httpRequest = makeFakeRequest()
+    await sut.handle(httpRequest)
+    expect(loadSpy).toHaveBeenCalledWith(httpRequest.params.surveyId)
   })
 
   test('Should return 403 if LoadSurveyById returns null', async () => {
