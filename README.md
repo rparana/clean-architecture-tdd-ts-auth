@@ -4,6 +4,7 @@
 
 [![Build Status](https://travis-ci.com/rparana/clean-architecture-tdd-ts-auth.svg?branch=main)](https://travis-ci.com/rparana/clean-architecture-tdd-ts-auth)
 [![Coverage Status](https://coveralls.io/repos/github/rparana/clean-architecture-tdd-ts-auth/badge.svg?branch=main)](https://coveralls.io/github/rparana/clean-architecture-tdd-ts-auth?branch=main)
+[![Known Vulnerabilities](https://snyk.io/test/github/rparana/clean-architecture-tdd-ts-auth/badge.svg)](https://snyk.io/test/github/rparana/clean-architecture-tdd-ts-auth)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 [![ISC License](https://img.shields.io/badge/License-ISC-yellow.svg)](https://opensource.org/licenses/)
 [![Open Source](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://opensource.org/)
