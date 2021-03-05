@@ -1,8 +1,11 @@
 import { MongoHelper, SurveyMongoRepository } from '@/infra/db/mongodb'
 import { Collection } from 'mongodb'
 import { AddSurveyModel } from '@/domain/usecases'
+import FakeObjectId from 'bson-objectid'
 
 let surveyCollection: Collection
+
+const fakeObjectId = new FakeObjectId()
 
 const makeFakeSurveyRequest = (): AddSurveyModel => {
   return {
@@ -106,8 +109,8 @@ describe('Survey Mongo Repository', () => {
 
     test('Should load survey by id return null', async () => {
       const sut = makeSut()
-      const surveys = await sut.loadById('any_Id')
-      expect(surveys).toBeFalsy()
+      const survey = await sut.loadById(fakeObjectId.id)
+      expect(survey).toBeFalsy()
     })
   })
 })
