@@ -1,5 +1,5 @@
 import { SurveyModel, SurveyResultModel } from '@/domain/models'
-import { LoadSurveyById, SaveSurveyResult, SaveSurveyResultModel } from '@/domain/usecases'
+import { LoadSurveyById, SaveSurveyResult, SaveSurveyResultParams } from '@/domain/usecases'
 import { HttpRequest } from '@/presentation/protocols'
 import { SaveSurveyResultController } from '@/presentation/controllers'
 import { forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
@@ -45,7 +45,7 @@ const makeLoadSurveyById = (): LoadSurveyById => {
 
 const makeSaveSurveyResultStub = (): SaveSurveyResult => {
   class SaveSurveyResultStub implements SaveSurveyResult {
-    async save (_data: SaveSurveyResultModel): Promise<SurveyResultModel> {
+    async save (_data: SaveSurveyResultParams): Promise<SurveyResultModel> {
       return new Promise(resolve => resolve(makeFakeSurveyResult()))
     }
   }

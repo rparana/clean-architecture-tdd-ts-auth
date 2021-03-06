@@ -1,13 +1,13 @@
 import { MongoHelper, SurveyMongoRepository } from '@/infra/db/mongodb'
 import { Collection } from 'mongodb'
-import { AddSurveyModel } from '@/domain/usecases'
+import { AddSurveyParams } from '@/domain/usecases'
 import FakeObjectId from 'bson-objectid'
 
 let surveyCollection: Collection
 
 const fakeObjectId = new FakeObjectId()
 
-const makeFakeSurveyRequest = (): AddSurveyModel => {
+const makeFakeSurveyRequest = (): AddSurveyParams => {
   return {
     question: 'any_question',
     answers: [{
