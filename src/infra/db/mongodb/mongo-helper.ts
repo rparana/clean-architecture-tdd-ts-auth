@@ -21,10 +21,10 @@ export const MongoHelper = {
     return this.client.db().collection(name)
   },
   map (data: any): any {
-    const { _id, ...collectionWithoutId } = data
-    return Object.assign({}, collectionWithoutId, { id: _id })
+    const { _id, ...rest } = data
+    return Object.assign({}, rest, { id: _id })
   },
-  mapCollection (collection: any): any {
+  mapCollection (collection: any[]): any[] {
     return collection.map(c => MongoHelper.map(c))
   }
 }
