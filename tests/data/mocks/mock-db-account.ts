@@ -1,5 +1,5 @@
 import { AddAccountParams } from '@/domain/usecases'
-import { AddAccountRepository, LoadAccountByEmailRepository } from '../protocols'
+import { AddAccountRepository, LoadAccountByEmailRepository, LoadAccountByTokenRepository, UpdateAccessTokenRepository } from '../protocols'
 import { AccountModel } from '@/domain/models'
 import { mockAccountModel } from '@/tests/domain/mocks'
 
@@ -9,7 +9,7 @@ export class AddAccountRepositorySpy implements AddAccountRepository {
 
   async add (params: AddAccountParams): Promise<AccountModel> {
     this.params = params
-    return this.result
+    return Promise.resolve(this.result)
   }
 }
 
@@ -19,6 +19,29 @@ export class LoadAccountByEmailRepositorySpy implements LoadAccountByEmailReposi
 
   async loadByEmail (params: string): Promise<AccountModel> {
     this.params = params
-    return this.result
+    return Promise.resolve(this.result)
+  }
+}
+
+export class UpdateAccessTokenRepositorySpy implements UpdateAccessTokenRepository {
+  id: string
+  token: string
+
+  async updateAccessToken (id: string, token: string): Promise<void> {
+    this.id = id
+    this.token = token
+    return Promise.resolve()
+  }
+}
+
+export class LoadAccountByTokenRepositorySpy implements LoadAccountByTokenRepository {
+  result = mockAccountModel()
+  token: string
+  role: string
+
+  async loadByToken (token: string, role?: string): Promise<AccountModel> {
+    this.token = token
+    this.role = role
+    return Promise.resolve(this.result)
   }
 }

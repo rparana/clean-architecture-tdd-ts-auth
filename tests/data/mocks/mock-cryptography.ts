@@ -20,7 +20,7 @@ export class HashComparerSpy implements HashComparer {
   async compare (plaintext: string, digest: string): Promise<boolean> {
     this.plaintext = plaintext
     this.digest = digest
-    return this.isValid
+    return Promise.resolve(this.isValid)
   }
 }
 
@@ -30,7 +30,7 @@ export class EncrypterSpy implements Encrypter {
 
   async encrypt (plaintext: string): Promise<string> {
     this.plaintext = plaintext
-    return this.ciphertext
+    return Promise.resolve(this.ciphertext)
   }
 }
 
@@ -40,6 +40,6 @@ export class DecrypterSpy implements Decrypter {
 
   async decrypt (ciphertext: string): Promise<string> {
     this.ciphertext = ciphertext
-    return this.plaintext
+    return Promise.resolve(this.plaintext)
   }
 }
