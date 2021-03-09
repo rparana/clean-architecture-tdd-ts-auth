@@ -5,9 +5,9 @@ import { mockAccountModel } from '@/tests/domain/mocks'
 
 export class AddAccountRepositorySpy implements AddAccountRepository {
   params: AddAccountParams
-  result = mockAccountModel()
+  result = true
 
-  async add (params: AddAccountParams): Promise<AccountModel> {
+  async add (params: AddAccountParams): Promise<boolean> {
     this.params = params
     return Promise.resolve(this.result)
   }

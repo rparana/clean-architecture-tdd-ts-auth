@@ -73,6 +73,6 @@ describe('DbAddAccount Usecase', () => {
     const { sut, loadAccountByEmailRepositorySpy } = makeSut()
     loadAccountByEmailRepositorySpy.result = mockAccountModel()
     const promise = await sut.add(mockAddAccountParams())
-    expect(promise).toBeNull()
+    expect(promise).toBeFalsy()
   })
 })

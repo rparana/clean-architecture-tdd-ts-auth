@@ -1,5 +1,5 @@
 import { DbSaveSurveyResults } from '@/data/usecases'
-import { SaveSurveyResultRepositorySpy } from '../mocks/mock-db-save-survey-results'
+import { SaveSurveyResultRepositorySpy } from '@/tests/data/mocks'
 import { mockSaveSurveyResultParams, throwError } from '@/tests/domain/mocks'
 
 type SutTypes = {
