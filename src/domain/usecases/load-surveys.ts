@@ -1,5 +1,8 @@
 import { SurveyModel } from '../models/survey'
 
 export interface LoadSurveys {
-  load: () => Promise<SurveyModel[]>
+  load: () => Promise<LoadSurveys.Result>
+}
+export namespace LoadSurveys {
+  export type Result = SurveyModel[]
 }
