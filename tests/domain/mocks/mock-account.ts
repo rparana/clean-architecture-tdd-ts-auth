@@ -1,8 +1,8 @@
 import { AccountModel } from '@/presentation/middlewares/auth-middleware-protocols'
 import faker from 'faker'
-import { AddAccountParams, AuthenticationParams } from '../usecases'
+import { AddAccount, AuthenticationParams } from '../usecases'
 
-export const mockAddAccountParams = (): AddAccountParams => (
+export const mockAddAccountParams = (): AddAccount.Params => (
   {
     name: faker.name.findName(),
     email: faker.internet.email(),

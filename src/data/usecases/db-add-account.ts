@@ -1,4 +1,4 @@
-import { AddAccount, AddAccountParams } from '@/domain/usecases'
+import { AddAccount } from '@/domain/usecases'
 import { AddAccountRepository, Hasher, LoadAccountByEmailRepository } from '@/data/protocols'
 
 export class DbAddAccount implements AddAccount {
@@ -8,7 +8,7 @@ export class DbAddAccount implements AddAccount {
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository
   ) {}
 
-  async add (accountData: AddAccountParams): Promise<boolean> {
+  async add (accountData: AddAccount.Params): Promise<AddAccount.Result> {
     const exists = await this.loadAccountByEmailRepository.loadByEmail(accountData.email)
     let isValid = false
     if (!exists) {
