@@ -1,4 +1,4 @@
-import { SurveyModel, SurveyResultModel } from '@/domain/models'
+import { SurveyResultModel } from '@/domain/models'
 import { AddSurvey, LoadSurveyById, LoadSurveys, SaveSurveyResult, SaveSurveyResultParams } from '@/domain/usecases'
 import { mockSurveyModel, mockSurveyModels, mockSurveyResultModel } from '@/tests/domain/mocks'
 
@@ -22,7 +22,7 @@ export class LoadSurveysSpy implements LoadSurveys {
 export class LoadSurveyByIdSpy implements LoadSurveyById {
   params: string
   result = mockSurveyModel()
-  async loadById (id: string): Promise<SurveyModel> {
+  async loadById (id: string): Promise<LoadSurveyById.Result> {
     this.params = id
     return Promise.resolve(this.result)
   }
