@@ -1,20 +1,17 @@
 import faker from 'faker'
 import { SignUpController } from '@/presentation/controllers'
 import { MissingParamError, ServerError, EmailInUseError } from '@/presentation/errors'
-import { HttpRequest } from '@/presentation/protocols'
 import { ok, serverError, badRequest, forbidden } from '@/presentation/helpers/http/http-helper'
 import { throwError } from '@/tests/domain/mocks'
 import { AddAccountSpy, AuthenticationSpy, ValidationSpy } from '../mocks'
 
-const mockRequest = (): HttpRequest => {
+const mockRequest = (): SignUpController.Request => {
   const password = faker.internet.password()
   return {
-    body: {
-      name: faker.name.findName(),
-      email: faker.internet.email(),
-      password,
-      passwordConfirmation: password
-    }
+    name: faker.name.findName(),
+    email: faker.internet.email(),
+    password,
+    passwordConfirmation: password
   }
 }
 
@@ -51,9 +48,9 @@ describe('SignUp Controller', () => {
     const request = mockRequest()
     await sut.handle(request)
     expect(addAccountSpy.params).toEqual({
-      name: request.body.name,
-      email: request.body.email,
-      password: request.body.password
+      name: request.name,
+      email: request.email,
+      password: request.password
     })
   })
 
@@ -74,7 +71,7 @@ describe('SignUp Controller', () => {
     const { sut, validationtSpy } = makeSut()
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    expect(validationtSpy.input).toEqual(httpRequest.body)
+    expect(validationtSpy.input).toEqual(httpRequest)
   })
 
   test('Should return 400 if Validation returns an error', async () => {
@@ -88,7 +85,7 @@ describe('SignUp Controller', () => {
     const { sut, authenticationSpy } = makeSut()
     const httpRequest = mockRequest()
     await sut.handle(httpRequest)
-    expect(authenticationSpy.params).toEqual({ email: httpRequest.body.email, password: httpRequest.body.password })
+    expect(authenticationSpy.params).toEqual({ email: httpRequest.email, password: httpRequest.password })
   })
 
   test('Shoud returns 500 if Authentication throws', async () => {
