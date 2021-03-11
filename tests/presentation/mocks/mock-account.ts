@@ -1,5 +1,5 @@
 import faker from 'faker'
-import { AddAccount, Authentication, AuthenticationParams, LoadAccountByToken } from '@/domain/usecases'
+import { AddAccount, Authentication, LoadAccountByToken } from '@/domain/usecases'
 import { mockAccountModel } from '@/tests/domain/mocks'
 import { AccountModel } from '@/domain/models'
 
@@ -13,9 +13,9 @@ export class AddAccountSpy implements AddAccount {
 }
 
 export class AuthenticationSpy implements Authentication {
-  params: AuthenticationParams
+  params: Authentication.Params
   result = faker.random.uuid()
-  async auth (params: AuthenticationParams): Promise<string> {
+  async auth (params: Authentication.Params): Promise<Authentication.Result> {
     this.params = params
     return this.result
   }
