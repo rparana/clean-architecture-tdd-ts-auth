@@ -42,4 +42,10 @@ describe('DbLoadSurveyResults UseCase', () => {
     expect(loadSurveyResultRepositorySpy.params.surveyId).toEqual(mockSurveyId)
     expect(loadSurveyResultRepositorySpy.params.accountId).toEqual(mockAccountId)
   })
+
+  test('Should return surveyResultModel on success', async () => {
+    const { sut, loadSurveyResultRepositorySpy } = makeSut()
+    const result = await sut.load(mockSurveyId, mockAccountId)
+    expect(result).toEqual(loadSurveyResultRepositorySpy.result)
+  })
 })
