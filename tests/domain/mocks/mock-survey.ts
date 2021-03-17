@@ -27,6 +27,9 @@ export const mockAddSurveyParams = (): AddSurvey.Params => ({
     image: faker.image.imageUrl(),
     answer: faker.random.word()
   }, {
+    image: faker.image.imageUrl(),
+    answer: faker.random.word()
+  }, {
     answer: faker.random.word()
   }],
   date: faker.date.recent()
