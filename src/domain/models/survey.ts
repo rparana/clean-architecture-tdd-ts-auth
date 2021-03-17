@@ -1,10 +1,11 @@
 export type SurveyModel = {
   id: string
   question: string
-  answers:
-  Array<{
-    image?: string
-    answer: string
-  }>
+  answers: Answers[]
   date: Date
+}
+
+type Answers ={
+  image?: string
+  answer: string
 }
