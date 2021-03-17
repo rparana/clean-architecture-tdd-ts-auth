@@ -1,6 +1,7 @@
 import faker from 'faker'
 import { DbLoadSurveyResult } from '@/data/usecases'
 import { LoadSurveyResultRepositorySpy } from '../mocks'
+import { throwError } from '@/tests/domain/mocks'
 
 const mockSurveyId = faker.random.uuid()
 const mockAccountId = faker.random.uuid()
@@ -25,6 +26,13 @@ describe('DbLoadSurveyResults UseCase', () => {
     await sut.load(mockSurveyId, mockAccountId)
     expect(loadSurveyResultRepositorySpy.params.surveyId).toEqual(mockSurveyId)
     expect(loadSurveyResultRepositorySpy.params.accountId).toEqual(mockAccountId)
+  })
+
+  test('Should throws if LoadSurveyResultRepository throws', async () => {
+    const { sut, loadSurveyResultRepositorySpy } = makeSut()
+    jest.spyOn(loadSurveyResultRepositorySpy, 'loadBySurveyId').mockImplementationOnce(throwError)
+    const promise = sut.load(mockSurveyId, mockAccountId)
+    await expect(promise).rejects.toThrow()
   })
 
   test('Should return null if LoadSurveyResultRepository return null', async () => {
