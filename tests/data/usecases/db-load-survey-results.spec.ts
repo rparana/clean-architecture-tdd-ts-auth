@@ -1,6 +1,6 @@
 import faker from 'faker'
 import { DbLoadSurveyResult } from '@/data/usecases'
-import { LoadSurveyResultRepositorySpy } from '../mocks'
+import { LoadSurveyByIdRepositorySpy, LoadSurveyResultRepositorySpy } from '../mocks'
 import { throwError } from '@/tests/domain/mocks'
 
 const mockSurveyId = faker.random.uuid()
@@ -9,14 +9,17 @@ const mockAccountId = faker.random.uuid()
 interface SutTypes {
   sut: DbLoadSurveyResult
   loadSurveyResultRepositorySpy: LoadSurveyResultRepositorySpy
+  loadSurveyByIdRepositorySpy: LoadSurveyByIdRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
   const loadSurveyResultRepositorySpy = new LoadSurveyResultRepositorySpy()
-  const sut = new DbLoadSurveyResult(loadSurveyResultRepositorySpy)
+  const loadSurveyByIdRepositorySpy = new LoadSurveyByIdRepositorySpy()
+  const sut = new DbLoadSurveyResult(loadSurveyResultRepositorySpy, loadSurveyByIdRepositorySpy)
   return {
     sut,
-    loadSurveyResultRepositorySpy
+    loadSurveyResultRepositorySpy,
+    loadSurveyByIdRepositorySpy
   }
 }
 
@@ -35,12 +38,25 @@ describe('DbLoadSurveyResults UseCase', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  test('Should return null if LoadSurveyResultRepository return null', async () => {
-    const { sut, loadSurveyResultRepositorySpy } = makeSut()
+  test('Should call LoadSurveyByIdRepository if LoadSurveyResultRepository return null', async () => {
+    const { sut, loadSurveyResultRepositorySpy, loadSurveyByIdRepositorySpy } = makeSut()
     loadSurveyResultRepositorySpy.result = null
     await sut.load(mockSurveyId, mockAccountId)
-    expect(loadSurveyResultRepositorySpy.params.surveyId).toEqual(mockSurveyId)
-    expect(loadSurveyResultRepositorySpy.params.accountId).toEqual(mockAccountId)
+    expect(loadSurveyByIdRepositorySpy.surveyId).toEqual(mockSurveyId)
+  })
+
+  test('Should return surveyResultModel with all answers with count and percent 0 if LoadSurveyResultRepository return null', async () => {
+    const { sut, loadSurveyResultRepositorySpy } = makeSut()
+    loadSurveyResultRepositorySpy.result = null
+    const result = await sut.load(mockSurveyId, mockAccountId)
+    expect(result).toBeTruthy()
+    expect(result.answers).toBeTruthy()
+    expect(result.answers[0].count).toBe(0)
+    expect(result.answers[0].percent).toBe(0)
+    expect(result.answers[1].count).toBe(0)
+    expect(result.answers[1].percent).toBe(0)
+    expect(result.answers[2].count).toBe(0)
+    expect(result.answers[2].percent).toBe(0)
   })
 
   test('Should return surveyResultModel on success', async () => {
