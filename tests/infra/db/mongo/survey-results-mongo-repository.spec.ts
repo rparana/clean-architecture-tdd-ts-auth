@@ -4,7 +4,7 @@ import { AccountModel, SurveyModel } from '@/domain/models'
 import { mockAddAccountParams, mockAddSurveyParams } from '@/tests/domain/mocks'
 
 let surveyCollection: Collection
-let surveyResultsCollection: Collection
+let surveyResultCollection: Collection
 let accountCollection: Collection
 
 const makeSurvey = async (): Promise<SurveyModel> => {
@@ -31,10 +31,10 @@ afterAll(async () => {
 
 beforeEach(async () => {
   surveyCollection = await MongoHelper.getCollection('surveys')
-  surveyResultsCollection = await MongoHelper.getCollection('surveyResults')
+  surveyResultCollection = await MongoHelper.getCollection('surveyResults')
   accountCollection = await MongoHelper.getCollection('accounts')
   await surveyCollection.deleteMany({})
-  await surveyResultsCollection.deleteMany({})
+  await surveyResultCollection.deleteMany({})
   await accountCollection.deleteMany({})
 })
 
@@ -44,44 +44,43 @@ describe('SurveyResultsMongoRepository', () => {
       const sut = makeSut()
       const survey = await makeSurvey()
       const account = await makeAccount()
-      const surveyResult = await sut.save({
+      await sut.save({
         surveyId: survey.id,
         accountId: account.id,
         answer: `${survey.answers[0].answer}`,
         date: new Date()
       })
+      const surveyResult = await surveyResultCollection.findOne({
+        surveyId: survey.id,
+        accountId: account.id
+      })
       expect(surveyResult).toBeTruthy()
-      expect(surveyResult.surveyId).toEqual(survey.id)
-      expect(surveyResult.answers[0].answer).toBe(survey.answers[0].answer)
-      expect(surveyResult.answers[0].count).toBe(1)
-      expect(surveyResult.answers[0].percent).toBe(100)
-      expect(surveyResult.answers[1].count).toBe(0)
-      expect(surveyResult.answers[1].percent).toBe(0)
     })
 
     test('Should update a survey result if its not new', async () => {
       const sut = makeSut()
       const survey = await makeSurvey()
       const account = await makeAccount()
-      await surveyResultsCollection.insertOne({
+      await surveyResultCollection.insertOne({
         surveyId: new ObjectId(survey.id),
         accountId: new ObjectId(account.id),
         answer: `${survey.answers[0].answer}`,
         date: new Date()
       })
-      const surveyResult = await sut.save({
+      await sut.save({
         surveyId: survey.id,
         accountId: account.id,
         answer: `${survey.answers[1].answer}`,
         date: new Date()
       })
+      const surveyResult = await surveyResultCollection
+        .find({
+          surveyId: survey.id,
+          accountId: account.id
+        })
+        .toArray()
       expect(surveyResult).toBeTruthy()
-      expect(surveyResult.surveyId).toEqual(survey.id)
-      expect(surveyResult.answers[0].answer).toBe(survey.answers[1].answer)
-      expect(surveyResult.answers[0].count).toBe(1)
-      expect(surveyResult.answers[0].percent).toBe(100)
-      expect(surveyResult.answers[1].count).toBe(0)
-      expect(surveyResult.answers[1].percent).toBe(0)
+      expect(surveyResult.length).toBe(1)
     })
   })
 
@@ -90,7 +89,7 @@ describe('SurveyResultsMongoRepository', () => {
       const sut = makeSut()
       const survey = await makeSurvey()
       const account = await makeAccount()
-      await surveyResultsCollection.insertMany([{
+      await surveyResultCollection.insertMany([{
         surveyId: new ObjectId(survey.id),
         accountId: new ObjectId(account.id),
         answer: `${survey.answers[0].answer}`,
@@ -114,7 +113,6 @@ describe('SurveyResultsMongoRepository', () => {
       const surveyResult = await sut.loadBySurveyId(survey.id, account.id)
       expect(surveyResult).toBeTruthy()
       expect(surveyResult.surveyId).toEqual(survey.id)
-      expect(surveyResult.answers[0].answer).toBe(survey.answers[1].answer)
       expect(surveyResult.answers[0].count).toBe(2)
       expect(surveyResult.answers[0].percent).toBe(50)
       expect(surveyResult.answers[1].count).toBe(2)

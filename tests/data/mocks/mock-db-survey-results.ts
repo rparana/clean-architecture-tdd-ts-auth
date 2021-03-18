@@ -4,9 +4,9 @@ import { mockSurveyResultModel } from '@/tests/domain/mocks'
 export class SaveSurveyResultRepositorySpy implements SaveSurveyResultRepository {
   params: SaveSurveyResultRepository.Params
   result = mockSurveyResultModel()
-  async save (data: SaveSurveyResultRepository.Params): Promise<SaveSurveyResultRepository.Result> {
+  async save (data: SaveSurveyResultRepository.Params): Promise<void> {
     this.params = data
-    return Promise.resolve(this.result)
+    return Promise.resolve()
   }
 }
 
@@ -17,7 +17,7 @@ export class LoadSurveyResultRepositorySpy implements LoadSurveyResultRepository
   }
 
   result = mockSurveyResultModel()
-  async loadBySurveyId (surveyId: string, accountId: string): Promise<SaveSurveyResultRepository.Result> {
+  async loadBySurveyId (surveyId: string, accountId: string): Promise<LoadSurveyResultRepository.Result> {
     this.params = { surveyId, accountId }
     return Promise.resolve(this.result)
   }
