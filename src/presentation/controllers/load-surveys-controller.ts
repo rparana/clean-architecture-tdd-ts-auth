@@ -7,7 +7,7 @@ export class LoadSurveysController implements Controller {
 
   async handle (request: LoadSurveysController.Request): Promise<HttpResponse> {
     try {
-      const surveys = await this.loadSurvey.load()
+      const surveys = await this.loadSurvey.load(request.accountId)
       return surveys.length ? ok(surveys) : noContent()
     } catch (error) {
       return serverError(error)
@@ -17,5 +17,6 @@ export class LoadSurveysController implements Controller {
 
 export namespace LoadSurveysController {
   export type Request = {
+    accountId: string
   }
 }
