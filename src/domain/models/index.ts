@@ -1,3 +1,4 @@
 export * from './account'
-export * from './survey'
+export * from './authentication'
 export * from './survey-result'
+export * from './survey'
