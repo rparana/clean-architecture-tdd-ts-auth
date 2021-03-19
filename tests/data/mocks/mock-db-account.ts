@@ -1,7 +1,6 @@
+import faker from 'faker'
 import { AddAccount } from '@/domain/usecases'
 import { AddAccountRepository, LoadAccountByEmailRepository, LoadAccountByTokenRepository, UpdateAccessTokenRepository } from '../protocols'
-import { AccountModel } from '@/domain/models'
-import { mockAccountModel } from '@/tests/domain/mocks'
 
 export class AddAccountRepositorySpy implements AddAccountRepository {
   params: AddAccount.Params
@@ -15,9 +14,13 @@ export class AddAccountRepositorySpy implements AddAccountRepository {
 
 export class LoadAccountByEmailRepositorySpy implements LoadAccountByEmailRepository {
   params: string
-  result = mockAccountModel()
+  result = {
+    id: faker.random.uuid(),
+    name: faker.name.findName(),
+    password: faker.internet.password()
+  }
 
-  async loadByEmail (params: string): Promise<AccountModel> {
+  async loadByEmail (params: string): Promise<LoadAccountByEmailRepository.Result> {
     this.params = params
     return Promise.resolve(this.result)
   }
@@ -35,11 +38,11 @@ export class UpdateAccessTokenRepositorySpy implements UpdateAccessTokenReposito
 }
 
 export class LoadAccountByTokenRepositorySpy implements LoadAccountByTokenRepository {
-  result = mockAccountModel()
+  result = { id: faker.random.uuid() }
   token: string
   role: string
 
-  async loadByToken (token: string, role?: string): Promise<AccountModel> {
+  async loadByToken (token: string, role?: string): Promise<LoadAccountByTokenRepository.Result> {
     this.token = token
     this.role = role
     return Promise.resolve(this.result)
