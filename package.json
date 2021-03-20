@@ -1,6 +1,6 @@
 {
   "name": "clean-architecture-tdd-ts-auth",
-  "version": "2.5.3",
+  "version": "2.5.4",
   "description": "",
   "main": "index.js",
   "_moduleAliases": {
