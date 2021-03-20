@@ -109,4 +109,21 @@ describe('SurveyMongoRepository', () => {
       expect(survey).toBe(false)
     })
   })
+
+  describe('LoadAnswersBySurveyId', () => {
+    test('Should return answers if survey exists', async () => {
+      const res = await surveyCollection.insertOne(mockAddSurveyParams())
+      const sut = makeSut()
+      const survey = await sut.loadAnswers(res.ops[0]._id)
+      expect(survey).toEqual(
+        res.ops[0].answers.map(({ answer }) => (answer))
+      )
+    })
+
+    test('Should empty array if no survey', async () => {
+      const sut = makeSut()
+      const survey = await sut.loadAnswers(fakeObjectId.id)
+      expect(survey).toEqual([])
+    })
+  })
 })

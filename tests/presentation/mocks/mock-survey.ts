@@ -1,5 +1,6 @@
-import { AddSurvey, CheckSurveyById, LoadSurveyById, LoadSurveys } from '@/domain/usecases'
-import { mockSurveyModel, mockSurveyModels } from '@/tests/domain/mocks'
+import faker from 'faker'
+import { AddSurvey, CheckSurveyById, LoadAnswersBySurveyId, LoadSurveys } from '@/domain/usecases'
+import { mockSurveyModels } from '@/tests/domain/mocks'
 
 export class AddSurveySpy implements AddSurvey {
   params: AddSurvey.Params
@@ -18,19 +19,25 @@ export class LoadSurveysSpy implements LoadSurveys {
   }
 }
 
-export class LoadSurveyByIdSpy implements LoadSurveyById {
+export class CheckSurveyByIdSpy implements CheckSurveyById {
   params: string
-  result = mockSurveyModel()
-  async loadById (id: string): Promise<LoadSurveyById.Result> {
+  result = true
+  async checkById (id: string): Promise<CheckSurveyById.Result> {
     this.params = id
     return Promise.resolve(this.result)
   }
 }
 
-export class CheckSurveyByIdSpy implements CheckSurveyById {
+export class LoadAnswersBySurveyIdSpy implements LoadAnswersBySurveyId {
   params: string
-  result = true
-  async checkById (id: string): Promise<CheckSurveyById.Result> {
+  result = [
+    faker.random.words(),
+    faker.random.words(),
+    faker.random.words(),
+    faker.random.words()
+  ]
+
+  async loadAnswers (id: string): Promise<LoadAnswersBySurveyId.Result> {
     this.params = id
     return Promise.resolve(this.result)
   }
