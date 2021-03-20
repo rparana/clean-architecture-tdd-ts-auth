@@ -1,4 +1,4 @@
-import { AddSurvey, LoadSurveyById, LoadSurveys } from '@/domain/usecases'
+import { AddSurvey, CheckSurveyById, LoadSurveyById, LoadSurveys } from '@/domain/usecases'
 import { mockSurveyModel, mockSurveyModels } from '@/tests/domain/mocks'
 
 export class AddSurveySpy implements AddSurvey {
@@ -22,6 +22,15 @@ export class LoadSurveyByIdSpy implements LoadSurveyById {
   params: string
   result = mockSurveyModel()
   async loadById (id: string): Promise<LoadSurveyById.Result> {
+    this.params = id
+    return Promise.resolve(this.result)
+  }
+}
+
+export class CheckSurveyByIdSpy implements CheckSurveyById {
+  params: string
+  result = true
+  async checkById (id: string): Promise<CheckSurveyById.Result> {
     this.params = id
     return Promise.resolve(this.result)
   }

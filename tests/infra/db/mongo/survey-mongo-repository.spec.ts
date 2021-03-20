@@ -94,4 +94,19 @@ describe('SurveyMongoRepository', () => {
       expect(survey).toBeFalsy()
     })
   })
+
+  describe('CheckSurveyById', () => {
+    test('Should check survey success', async () => {
+      const res = await surveyCollection.insertOne(mockAddSurveyParams())
+      const sut = makeSut()
+      const survey = await sut.checkById(res.ops[0]._id)
+      expect(survey).toBe(true)
+    })
+
+    test('Should check survey by id return false', async () => {
+      const sut = makeSut()
+      const survey = await sut.checkById(fakeObjectId.id)
+      expect(survey).toBe(false)
+    })
+  })
 })
