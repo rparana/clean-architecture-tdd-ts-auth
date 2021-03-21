@@ -115,4 +115,54 @@ describe('Survey GraphQL', () => {
       expect(res.errors[0].message).toBe('Access denied')
     })
   })
+
+  describe('SaveSurveyResult Mutation', () => {
+    const saveSurveyResultQuery = gql`
+      mutation saveSurveyResult ($surveyId: String!, $answer: String!) {
+        saveSurveyResult (surveyId: $surveyId, , answer: $answer) {
+          question
+          answers {
+            answer
+            image
+            count
+            percent
+            isCurrentAccountAnswer
+          }
+          date
+        }
+      }
+    `
+    test('Should return an SurveyResult on success', async () => {
+      const accessToken = await mockAccessToken()
+      const now = new Date()
+      const surveyRes = await surveyCollection.insertOne({
+        question: 'Question',
+        answers: [{
+          image: 'https://image.name.com',
+          answer: 'Answer 1'
+        },
+        {
+          answer: 'Answer 2'
+        }],
+        date: now
+      })
+      const { mutate } = createTestClient({
+        apolloServer,
+        extendMockRequest: {
+          headers: {
+            'x-access-token': accessToken
+          }
+        }
+      })
+      const res: any = await mutate(saveSurveyResultQuery, {
+        variables: {
+          surveyId: surveyRes.ops[0]._id.toString(),
+          answer: 'Answer 1'
+        }
+      })
+      expect(res.data.saveSurveyResult).toBeTruthy()
+      expect(res.data.saveSurveyResult.question).toBe('Question')
+      expect(res.data.saveSurveyResult.answers[0].count).toBe(1)
+    })
+  })
 })
