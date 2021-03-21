@@ -29,6 +29,7 @@
     "bcrypt": "^5.0.1",
     "express": "^4.17.1",
     "graphql": "^15.5.0",
+    "graphql-scalars": "^1.9.0",
     "jsonwebtoken": "^8.5.1",
     "module-alias": "^2.2.2",
     "mongo-round": "^1.0.0",
