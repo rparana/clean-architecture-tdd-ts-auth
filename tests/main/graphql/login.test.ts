@@ -92,5 +92,28 @@ describe('Login GraphQL', () => {
       expect(res.data.signUp.accessToken).toBeTruthy()
       expect(res.data.signUp.name).toBe(name)
     })
+
+    test('Should return an EmailInUseError on credentials already exists', async () => {
+      const password = faker.internet.password()
+      const hashedPassword = await hash(password, 12)
+      const name = faker.name.findName()
+      const email = faker.internet.email()
+      await accountCollection.insertOne({
+        name,
+        email,
+        password: hashedPassword
+      })
+      const { mutate } = createTestClient({ apolloServer })
+      const res: any = await mutate(signUpMutation, {
+        variables: {
+          name,
+          email,
+          password,
+          passwordConfirmation: password
+        }
+      })
+      expect(res.data).toBeFalsy()
+      expect(res.errors[0].message).toBe('The received email is already in use')
+    })
   })
 })
