@@ -162,7 +162,28 @@ describe('Survey GraphQL', () => {
       })
       expect(res.data.saveSurveyResult).toBeTruthy()
       expect(res.data.saveSurveyResult.question).toBe('Question')
+      expect(res.data.saveSurveyResult.answers[0].isCurrentAccountAnswer).toBe(true)
       expect(res.data.saveSurveyResult.answers[0].count).toBe(1)
+    })
+
+    test('Should return an AccessDeniedError if no accessToken provider', async () => {
+      const surveyRes = await surveyCollection.insertOne({
+        question: 'any_question',
+        answers: [{
+          image: 'any_image',
+          answer: 'any_answer'
+        }],
+        date: new Date()
+      })
+      const { mutate } = createTestClient({ apolloServer })
+      const res: any = await mutate(saveSurveyResultQuery, {
+        variables: {
+          surveyId: surveyRes.ops[0]._id.toString(),
+          answer: 'Answer 1'
+        }
+      })
+      expect(res.data).toBeFalsy()
+      expect(res.errors[0].message).toBe('Access denied')
     })
   })
 })

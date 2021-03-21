@@ -4,10 +4,10 @@ import { makeLogControllerDecorator } from '@/main/factories/decorators/log-cont
 
 export default {
   Query: {
-    surveyResult: async (_parent: any, args: any) => adaptResolver(makeLogControllerDecorator(makeLoadSurveyResultController()), args)
+    surveyResult: async (_parent: any, args: any, context: any) => adaptResolver(makeLogControllerDecorator(makeLoadSurveyResultController()), args, context)
   },
 
   Mutation: {
-    saveSurveyResult: async (_parent: any, args: any) => adaptResolver(makeLogControllerDecorator(makeSaveSurveyResultController()), args)
+    saveSurveyResult: async (_parent: any, args: any, context: any) => adaptResolver(makeLogControllerDecorator(makeSaveSurveyResultController()), args, context)
   }
 }

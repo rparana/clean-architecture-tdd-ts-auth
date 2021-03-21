@@ -4,6 +4,6 @@ import { makeLogControllerDecorator } from '@/main/factories/decorators/log-cont
 
 export default {
   Query: {
-    surveys: async () => adaptResolver(makeLogControllerDecorator(makeLoadSurveysController()))
+    surveys: async (_parent: any, args: any, context: any) => adaptResolver(makeLogControllerDecorator(makeLoadSurveysController()), null, context)
   }
 }
