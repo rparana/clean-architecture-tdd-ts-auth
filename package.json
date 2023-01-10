@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node dist/main/server.js",
     "build": "rimraf dist && tsc -p tsconfig-build.json",
-    "debug": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
+    "dev": "nodemon -L --watch ./dist --inspect=0.0.0.0:9222 --nolazy ./dist/main/server.js",
     "up": "npm run build && docker-compose up -d",
     "down": "docker-compose down",
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules src/main/server.ts",
